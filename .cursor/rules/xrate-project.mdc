@@ -1,0 +1,44 @@
+---
+description: XRate frontend – project context and feature scope
+alwaysApply: true
+---
+
+# XRate Frontend – Project Rules
+
+This is a **React (Next.js) frontend** that consumes the XRate backend API for currency exchange.
+
+## Core Features
+
+1. **Currency conversion form**
+   - Fields: amount, source currency, target currency.
+   - Submit to convert and show result (and handle API errors).
+
+2. **Latest exchange rates**
+   - User selects a base currency; display latest rates for that base (from API).
+
+3. **Historical rates view**
+   - Date range selector (from/to).
+   - Paginated results; align pagination with backend (e.g. page/size params).
+
+## Quality & UX
+
+- **Clickable elements**: Buttons, links, and any interactive element that responds to click must use `cursor-pointer` (Tailwind) so the cursor indicates they are clickable.
+- **Validation**: Validate inputs (amount > 0, valid currencies). Handle **excluded currencies** from API (e.g. 400/422) with clear messages.
+- **Loading**: Show loading states for all API calls (spinners/skeletons).
+- **Errors**: User-friendly error messages; never show raw API dumps. Distinguish network, validation, and server errors.
+- **Structure**: Clean component hierarchy; separate presentational vs data-fetching; reuse shared UI (forms, tables, alerts).
+- **Components**: Prefer using or extending existing components (e.g. in `src/components/`). Create a new component only when none can be reused or extended, or when the new one is likely to be reused later—then add it to the shared components so it can be used or extended in the future.
+- **State**: Prefer local state for forms; consider React Query/SWR or similar for server state (rates, history).
+- **TypeScript**: Use strict types for API responses, form state, and props. Define shared types (e.g. `Currency`, `ExchangeRate`) in a central place.
+
+## Styling
+
+- **Reference**: Use the **login page** (`src/app/login/page.tsx`) as the visual and style reference for the whole project. Reuse its patterns: color palette (slate backgrounds, blue accents), input/button styling (rounded-xl, borders, focus rings), spacing, and layout so the app looks consistent.
+
+## File naming
+
+- **camelCase**: Use camelCase for all source file names (e.g. `apiError.ts`, `authApi.ts`, `useHttp.ts`). Do not use kebab-case for files (e.g. avoid `api-error.ts`, `auth-api.ts`). Directories may follow existing conventions (e.g. `components/`, `app/`).
+
+## Stack
+
+- Next.js 16, React 19, TypeScript, Tailwind CSS. Use App Router and existing `src/app` layout.

@@ -1,0 +1,46 @@
+---
+description: React components, state, and UX patterns for XRate
+globs: "**/*.tsx"
+alwaysApply: false
+---
+
+# React Components & UX
+
+## Component Structure
+
+- Prefer **functional components** and hooks.
+- Keep pages thin: delegate to feature components (e.g. `ConversionForm`, `LatestRates`, `HistoricalRates`).
+- Colocate component-specific styles (Tailwind) with the component; reuse design tokens (e.g. `text-destructive`, `rounded-lg`) for consistency.
+
+## Loading & Error UX
+
+- **Loading**: Show a loading indicator (spinner or skeleton) while fetching. Disable submit/buttons during request.
+
+```tsx
+// ✅ Show loading state
+{isLoading && <Spinner />}
+<Button disabled={isLoading}>Convert</Button>
+```
+
+- **Errors**: Render user-friendly messages; map API error codes to copy (e.g. "This currency is not available" for excluded currencies).
+
+```tsx
+// ✅ Clear error message
+{error && (
+  <div role="alert" className="text-destructive">
+    {error.message}
+  </div>
+)}
+```
+
+## Validation
+
+- Validate amount (positive number), required fields, and currency codes before submit.
+- Show inline validation feedback (e.g. under inputs) and optionally disable submit until valid.
+- After API errors (e.g. excluded currency), show message near the form or the offending field.
+
+## State Management
+
+- Use **useState** for form fields and local UI state.
+- For server state (rates, history): use **React Query (TanStack Query)** or **SWR** to avoid manual loading/error/cache logic.
+- Avoid prop-drilling: use context only when many components need the same data (e.g. selected base currency); otherwise pass props or use hooks.

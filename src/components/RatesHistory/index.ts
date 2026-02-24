@@ -1,0 +1,1 @@
+export { RatesHistory } from './RatesHistory'

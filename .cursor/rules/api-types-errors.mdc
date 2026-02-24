@@ -1,0 +1,47 @@
+---
+description: API client, types, and error handling for XRate
+globs: "**/*.ts"
+alwaysApply: false
+---
+
+# API & Type Safety
+
+## Types
+
+- Define **shared types** for API contracts (e.g. in `src/types/`): `Currency`, `ExchangeRate`, `ConversionResult`, `HistoricalRatesResponse`, pagination params.
+- Type all API response shapes and request bodies; avoid `any` for API data.
+
+```ts
+// ✅ Typed response
+interface ConversionResponse {
+  amount: number;
+  from: string;
+  to: string;
+  result: number;
+  rate: number;
+}
+```
+
+## API Client
+
+- Centralize API base URL (env var, e.g. `NEXT_PUBLIC_API_URL`).
+- Use a single module (e.g. `src/lib/api.ts` or `src/services/rates.ts`) for API calls: convert, latest rates, historical rates with date range and pagination.
+- Prefer `fetch` or a small wrapper; parse JSON and validate status before returning.
+
+## Error Handling
+
+- **Excluded currencies**: API may return 400/422 for unsupported or excluded currencies. Parse error body and surface a clear message (e.g. "Currency X is not supported").
+- **Network errors**: Catch fetch failures and show a generic "Connection error" style message.
+- **4xx/5xx**: Map status to user-facing messages; log details in dev only. Return typed errors (e.g. `{ code: string; message: string }`) so UI can branch on code.
+
+```ts
+// ✅ Handle and normalize errors
+async function convert(params: ConversionParams): Promise<ConversionResponse> {
+  const res = await fetch(`${API_URL}/convert`, { ... });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new ApiError(res.status, body.message ?? "Conversion failed");
+  }
+  return res.json();
+}
+```
