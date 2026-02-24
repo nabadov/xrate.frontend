@@ -18,7 +18,7 @@ cp .env .env.local   # then edit .env.local if needed
 npm run dev
 ```
 
-The app runs at **http://localhost:3000**. It will redirect to the login page if you’re not authenticated. To run the linter: `npm run lint`.
+The app runs at **http://localhost:3000**. It will redirect to the login page if you’re not authenticated. **Test credentials:** username `user`, password `user123`. To run the linter: `npm run lint`.
 
 **Config** lives in `.env` and `.env.local` (the latter overrides for local tweaks). The bits you care about:
 
@@ -47,7 +47,6 @@ I kept things flat and predictable so I can find stuff quickly and keep the API 
 - **layout.tsx** — Root layout: fonts (Geist), global slate background, gradient and grid overlay, `AuthGuard` around children, Sonner toaster.
 - **page.tsx** — Home: converter form, latest rates, and rates history in one scrollable page.
 - **login/page.tsx** — Login form (user name + password), validation with Zod, redirect after success (with optional `redirectUrl` query param).
-- **converter/page.tsx** — Optional dedicated converter route if you want it; the main flow is the converter block on the home page.
 
 **Components (`src/components/`):**
 
